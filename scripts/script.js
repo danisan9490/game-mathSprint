@@ -68,19 +68,14 @@ function getSavedBestScores() {
 // Update Best Score Array
 function updateBestScore() {
   bestScoreArray.forEach((score, index) => {
-    // Select correct Best Score to update
     if (questionAmount == score.questions) {
-      // Return Best Score as number with one decimal
       const savedBestScore = Number(bestScoreArray[index].bestScore);
-      // Update if the new final score is less or replacing zero
       if (savedBestScore === 0 || savedBestScore > finalTime) {
         bestScoreArray[index].bestScore = finalTimeDisplay;
       }
     }
   });
-  // Update Splash Page
   bestScoresToDOM();
-  // Save to Local Storage
   localStorage.setItem('bestScores', JSON.stringify(bestScoreArray));
 }
 
@@ -97,7 +92,6 @@ function playAgain() {
 
 // Show Score Page
 function showScorePage() {
-  // Show Play Again button after 1 second delay
   setTimeout(() => {
     playAgainBtn.hidden = false;
   }, 1000);
@@ -114,7 +108,6 @@ function scoresToDOM() {
   penaltyTimeEl.textContent = `Penalty: +${penaltyTime}s`;
   finalTimeEl.textContent = `${finalTimeDisplay}s`;
   updateBestScore();
-  // Scroll to Top, go to Score Page
   itemContainer.scrollTo({ top: 0, behavior: 'instant' });
   showScorePage();
 }
@@ -124,12 +117,9 @@ function checkTime() {
   console.log(timePlayed);
   if (playerGuessArray.length == questionAmount) {
     clearInterval(timer);
-    // Check for wrong guess, add penaltyTime
     equationsArray.forEach((equation, index) => {
       if (equation.evaluated === playerGuessArray[index]) {
-        // Correct Guess, No Penalty
       } else {
-        // Incorrect Guess, Add Penalty
         penaltyTime += 0.5;
       }
     });
@@ -147,7 +137,6 @@ function addTime() {
 
 // Start timer when game page is clicked
 function startTimer() {
-  // Reset times
   timePlayed = 0;
   penaltyTime = 0;
   finalTime = 0;
@@ -157,10 +146,8 @@ function startTimer() {
 
 // Scroll, Store user selection in playerGuessArray
 function select(guessedTrue) {
-  // Scroll 80 more pixels
   valueY += 80;
   itemContainer.scroll(0, valueY);
-  // Add player guess to array
   return guessedTrue ? playerGuessArray.push('true') : playerGuessArray.push('false');
 }
 
@@ -177,13 +164,10 @@ function getRandomInt(max) {
 
 // Create Correct/Incorrect Random Equations
 function createEquations() {
-  // Randomly choose how many correct equations there should be
   const correctEquations = getRandomInt(questionAmount);
   console.log('correct equations:', correctEquations);
-  // Set amount of wrong equations
   const wrongEquations = questionAmount - correctEquations;
   console.log('wrong equations:', wrongEquations);
-  // Loop through for each correct equation, multiply random numbers up to 9, push to array
   for (let i = 0; i < correctEquations; i++) {
     firstNumber = getRandomInt(9);
     secondNumber = getRandomInt(9);
@@ -192,7 +176,6 @@ function createEquations() {
     equationObject = { value: equation, evaluated: 'true' };
     equationsArray.push(equationObject);
   }
-  // Loop through for each wrong equation, mess with the equation results, push to array
   for (let i = 0; i < wrongEquations; i++) {
     firstNumber = getRandomInt(9);
     secondNumber = getRandomInt(9);
@@ -211,13 +194,10 @@ function createEquations() {
 // Add Equations to DOM
 function equationsToDOM() {
   equationsArray.forEach((equation) => {
-    // Item
     const item = document.createElement('div');
     item.classList.add('item');
-    // Equation Text
     const equationText = document.createElement('h1');
     equationText.textContent = equation.value;
-    // Append
     item.appendChild(equationText);
     itemContainer.appendChild(item);
   });
@@ -225,22 +205,16 @@ function equationsToDOM() {
 
 // Dynamically adding correct/incorrect equations
 function populateGamePage() {
-  // Reset DOM, Set Blank Space Above
   itemContainer.textContent = '';
-  // Spacer
   const topSpacer = document.createElement('div');
   topSpacer.classList.add('height-240');
-  // Selected Item
   const selectedItem = document.createElement('div');
   selectedItem.classList.add('selected-item');
-  // Append
   itemContainer.append(topSpacer, selectedItem);
 
-  // Create Equations, Build Elements in DOM
   createEquations();
   equationsToDOM();
 
-  // Set Blank Space Below
   const bottomSpacer = document.createElement('div');
   bottomSpacer.classList.add('height-500');
   itemContainer.appendChild(bottomSpacer);
@@ -286,16 +260,14 @@ function selectQuestionAmount(e) {
   questionAmount = getRadioValue();
   console.log('question amount:', questionAmount);
   if (questionAmount) {
-      showCountdown();
+    showCountdown();
   }
 }
 
 // Switch selected input styling
 startForm.addEventListener('click', () => {
   radioContainers.forEach((radioEl) => {
-    // Remove Selected Label Styling
     radioEl.classList.remove('selected-label');
-    // Add it back if radio input is checked
     if (radioEl.children[1].checked) {
       radioEl.classList.add('selected-label');
     }
